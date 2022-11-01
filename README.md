@@ -1,8 +1,10 @@
 # ESP32 Motor Control Firmware
 This repo initially built from platformio project
+
 This repo contains firmware for controlling 2 wheel brushless DC motor using
 Brushless Motor Driver in this [link](https://tokopedia.link/pNh5IbSZBub). It is similar to VNH5019 or VNH2SP30/VNH3SP30 though
 the only difference is the motor type
+
 In the specified motor driver, it contains a tachometer and a direction pin. Therefore
 this firmware use esp32 pulse counter module to count the pulses to offload the computing a bit
 
