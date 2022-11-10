@@ -172,7 +172,8 @@ int64_t Encoder::read(){
 
 int64_t Encoder::read_and_clear(){
     _ENTER_CRITICAL();
-    uint64_t temp = count + get_raw_count();
+    int64_t temp = count + get_raw_count();
+    pcnt_counter_clear(unit);
     count = 0;
     _EXIT_CRITICAL();
     return temp;
@@ -194,17 +195,18 @@ int64_t Encoder::get_raw_count(){
 
     //Check if counter is overflowed, if so re-read and compensate
     //see https://github.com/espressif/esp-idf/blob/v4.4.1/tools/unit-test-app/components/test_utils/ref_clock_impl_rmt_pcnt.c#L168-L172
-    if (PCNT.int_st.val & BIT(unit)) {
-        pcnt_get_counter_value(unit, &c);
-		if(PCNT.status_unit[unit].COUNTER_H_LIM){
-			compensate = enc_config.counter_h_lim;
-		} else if (PCNT.status_unit[unit].COUNTER_L_LIM) {
-			compensate = enc_config.counter_l_lim;
-		}
-	}
+    // if (PCNT.int_st.val & BIT(unit)) {
+    //     pcnt_get_counter_value(unit, &c);
+	// 	if(PCNT.status_unit[unit].COUNTER_H_LIM){
+	// 		compensate = enc_config.counter_h_lim;
+	// 	} else if (PCNT.status_unit[unit].COUNTER_L_LIM) {
+	// 		compensate = enc_config.counter_l_lim;
+	// 	}
+	// }
 
 	_EXIT_CRITICAL();
-	return compensate + c;
+	// return compensate + c;
+    return c;
 }
 
 int64_t Encoder::clear(){
@@ -216,10 +218,12 @@ int64_t Encoder::clear(){
 
 void Encoder::attach_both_edge(int pin_enc, int pin_dir){
     attach(pin_enc, pin_dir, both_edge);
+    pcnt_counter_clear(unit);
 }
 
 void Encoder::attach_single_edge(int pin_enc, int pin_dir){
     attach(pin_enc, pin_dir, single_edge);
+    pcnt_counter_clear(unit);
 }
 
 void Encoder::detach(){

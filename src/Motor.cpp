@@ -65,7 +65,7 @@ bool Motor::set_pwm(int pwm){
         ledcWrite(this->pwm_channel, abs(pwm));
         ESP_LOGE(TAG, "PWM Val: %d", pwm);
         if(configs.reversed){
-            digitalWrite(configs.pin_direction, LOW); //Cant pull down pin to gnd
+            digitalWrite(configs.pin_direction, LOW);
             ESP_LOGE(TAG, "Direction: should be 0 currently %d", digitalRead(configs.pin_direction));
             // ESP_LOGE(TAG, "Pin Direction: %d is %d", configs.pin_direction, FORWARD);
         } else {
@@ -89,13 +89,29 @@ uint8_t Motor::getpinpwm_channel(){
     return this->pwm_channel;
 }
 
-int64_t Motor::get_encoder(){
+int64_t Motor::get_encoder_clear(){
     if(configs.pin_encoder == 0){
         ESP_LOGE(TAG, "Encoder haven't configured yet");
         return 0;
     }
     count = motor_encoder.read_and_clear();
     return count;
+}
+
+int64_t Motor::get_encoder(){
+    if(configs.pin_encoder == 0){
+        ESP_LOGE(TAG, "Encoder haven't configured yet");
+        return 0;
+    }
+    count = motor_encoder.read();
+    return count;
+}
+
+float Motor::get_rpm(){
+    uint32_t current_duration = millis() - last_millis;
+    input = (get_encoder_clear())/configs.ppr/current_duration;
+    last_millis = millis();
+    return input;
 }
 
 bool Motor::auto_speed(){

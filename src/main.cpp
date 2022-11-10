@@ -18,6 +18,7 @@ void setup() {
   left_motor.pin_encoder    = 13;
   left_motor.pwm_freq       = 1000;
   left_motor.reversed       = true;
+  left_motor.ppr            = 10;
   motor_kiri.config(left_motor);
   // motor_kanan.set_pindir(15, true);
   // motor_kanan.set_pinpwm(13);
@@ -27,13 +28,18 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  uint32_t last_millis = millis();
+
   for (size_t i = 0; i < 100; i++)
   {
-    ESP_LOGE(TAG, "Encoder: %d", motor_kiri.get_encoder());
+    // ESP_LOGE(TAG, "Encoder: %d", motor_kiri.get_encoder());
     if(i > 50){
       motor_kiri.set_pwm(200 - (i*4));
     } else motor_kiri.set_pwm(i*4);
+    // int temp1 = millis() - last_millis;
+    float temp = (float)motor_kiri.get_encoder_clear() / 0.5;
+    // last_millis = millis();
+    ESP_LOGE(TAG, "Time temp: %.1f", temp);
     delay(500);
-  }
-  
+  } 
 }

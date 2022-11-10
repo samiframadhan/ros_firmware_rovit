@@ -25,13 +25,13 @@ class Encoder
 {
 private:
     static bool attached_interrupt;
-    int64_t get_raw_count();
     void attach(int pinE, int pin_dir, enum enc_type et);
     bool working = false;
     bool direction = false;//false forward, true reverse
     bool attached = false;
 
 public:
+    int64_t get_raw_count();
     int pin = 0;
     volatile int64_t count = 0;
     volatile uint64_t micro_last = 0;

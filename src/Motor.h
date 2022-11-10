@@ -11,6 +11,7 @@ struct motor_configs {
     int pin_pwm         = 0;
     int pwm_freq        = 0;
     bool reversed       = false;
+    uint ppr            = 0;
     // float K_P, K_I, K_D;
 };
 
@@ -23,6 +24,11 @@ private:
     int enable_pin = 0;
     QuickPID motor_pid;
     int pwm_channel = 0;
+    int getpindir();
+    int getpinpwm();
+    uint8_t getpinpwm_channel();
+    int64_t last_pulse = 0;
+    uint64_t last_millis = 0;
     
 public:
     Encoder motor_encoder;
@@ -31,12 +37,11 @@ public:
     uint8_t res = 8;
     void set_pinpwm(int pinpwm);
     void config(motor_configs);
+    float get_rpm();
 
-    bool set_pwm(int pwm_val);
-    int getpindir();
-    int getpinpwm();
-    uint8_t getpinpwm_channel();
+    int64_t get_encoder_clear();
     int64_t get_encoder();
+    bool set_pwm(int pwm_val);
     int absolute(int value);
     bool auto_speed();
 
