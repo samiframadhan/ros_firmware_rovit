@@ -5,10 +5,11 @@
 #define BACKWARD 1
 
 struct motor_configs {
-    int pin_direction   = 0;
-    int pin_encoder     = 0;
-    int pin_enable      = 0;
-    int pin_pwm         = 0;
+                             // Referensi ke motor driver brushlessnya
+    int pin_direction   = 0; // VR
+    int pin_encoder     = 0; // Signal
+    int pin_enable      = 0; // EL atau Enable
+    int pin_pwm         = 0; // Z/F
     int pwm_freq        = 0;
     bool reversed       = false;
     uint ppr            = 0;

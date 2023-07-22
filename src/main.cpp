@@ -2,24 +2,34 @@
 #include "Motor.h"
 
 Motor motor_kiri;
-// Motor motor_kanan;
+Motor motor_kanan;
 int count = 200;
 
 static char* TAG = "Debugging";
 
 motor_configs left_motor;
-// motor_configs right_motor;
+motor_configs right_motor;
 
 void setup() {
   // put your setup code here, to run once:
-  left_motor.pin_direction  = 12;
-  left_motor.pin_enable     = 14;
-  left_motor.pin_pwm        = 27;
-  left_motor.pin_encoder    = 13;
+  left_motor.pin_direction  = 13;
+  left_motor.pin_enable     = 4;
+  left_motor.pin_pwm        = 12;
+  left_motor.pin_encoder    = 5;
   left_motor.pwm_freq       = 1000;
   left_motor.reversed       = true;
   left_motor.ppr            = 10;
+
+  right_motor.pin_direction = 19;
+  right_motor.pin_enable    = 14;
+  right_motor.pin_pwm       = 18;
+  right_motor.pin_encoder   = 15;
+  right_motor.pwm_freq      = 1000;
+  right_motor.reversed      = true;
+  right_motor.ppr           = 10;
+
   motor_kiri.config(left_motor);
+  motor_kanan.config(right_motor);
   // motor_kanan.set_pindir(15, true);
   // motor_kanan.set_pinpwm(13);
   // motor_kanan.set_enable(12);
